@@ -55,7 +55,7 @@ function botActions() {
 
     const imageLink = await s3.Upload(
       {
-        path: fileUrl,
+        path: fileUrl.href,
       },
       '/alliance/news/',
     );
