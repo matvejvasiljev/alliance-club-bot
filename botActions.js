@@ -37,8 +37,8 @@ function botActions() {
       return;
     }
 
-    const title = caption.split('&&')[0].trim;
-    const message = caption.split('&&')[1].trim;
+    const title = caption.split('&&')[0].trim();
+    const message = caption.split('&&')[1].trim();
 
     const fileUrl = await ctx.telegram.getFileLink(fileId);
     const response = await apiTg.get(fileUrl.href);
