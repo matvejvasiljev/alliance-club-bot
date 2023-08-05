@@ -1,17 +1,9 @@
-// const fs = require('fs');
-// const axios = require('axios');
 const bot = require('./bot');
-// const s3 = require('./s3');
 const { getAdmin } = require('./controllers/admins');
 const { createNews } = require('./controllers/news');
 const { replays } = require('./utils/constants');
 
 function botActions() {
-  // const apiTg = axios.create({
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  // });
   bot.start((ctx) => {
     ctx.replyWithHTML(`${ctx.update.message.from.first_name}, здравствуйте. Меня зовут <b>${ctx.botInfo.first_name}</b>. Я умею размещать новости на сайте нашего клуба`);
   });
@@ -40,27 +32,8 @@ function botActions() {
 
     const title = caption.split('&&')[0].trim();
     const message = caption.split('&&')[1].trim();
-
     const fileUrl = await ctx.telegram.getFileLink(fileId);
-    // const response = await apiTg.get(fileUrl.href);
-    // const response = await res.json();
-    // const filePath = `./${file.file_path}`
-    // путь к файлу на сервере Telegram
-    // const fileStream = fs.createWriteStream(filePath)
-    // создаем поток для записи файла
-    // await ctx.telegram.downloadFile(fileId, fileStream)
-    // скачиваем файл и записываем его на диск
-
     ctx.reply(`${firstName}, ${replays.getSuccess}`);
-
-    // const imageLink = await s3.Upload(
-    //   {
-    //     path: fileUrl.href,
-    //   },
-    //   '/alliance/news/',
-    // );
-    // console.log('admin: ', admin);
-    // console.log('imageLink: ', imageLink);
     const data = {
       message,
       title,
@@ -68,18 +41,19 @@ function botActions() {
       admin: admin._id,
       tgMsgId,
       publishedAt,
+      fileId,
     };
-    await createNews(data);
+    const res = await createNews(data);
+    if (res === 'Ok') {
+      ctx.reply(replays.addNews);
+    } else {
+      ctx.reply(res);
+    }
   });
 
-  bot.on('document', async (ctx) => {
-    const { caption } = ctx.update.message;
-    // const file = ctx.update.message.document;
-    // const fileUrl = await ctx.telegram.getFileLink(file.file_id);
-    // console.log(caption);
-    console.log(caption);
-    // console.log(fileUrl);
-  });
+  // TODO сделать добавление новости через добавление документа
+  // bot.on('document', async (ctx) => {
+  // });
 }
 
 module.exports = botActions;

@@ -1,4 +1,6 @@
 const News = require('../models/news');
+const apiTg = require('../utils/apiTg');
+const bot = require('../bot');
 
 module.exports.createNews = async (data) => {
   console.log('data: ', data);
@@ -10,10 +12,11 @@ module.exports.createNews = async (data) => {
       owner: data.admin._id,
       tgMsgId: data.tgMsgId,
       publishedAt: data.publishedAt,
+      fileId: data.fileId,
     });
 
     await news.save();
-    return news;
+    return 'Ok';
   } catch (err) {
     console.log(err.message);
     return err.message;
@@ -23,8 +26,14 @@ module.exports.createNews = async (data) => {
 module.exports.getAllNews = async (_, res, next) => {
   try {
     const news = await News.find({});
-    res.status(200).send(news);
+    const newNews = news.map(async (item) => {
+      const fileUrl = await bot.telegram.getFileLink(item.fileId);
+      const image = { photo: await apiTg.get(fileUrl.href).blob() };
+      Object.assign(item, image);
+    });
+    res.status(200).send(newNews);
   } catch (err) {
+    console.log(err.message);
     next(err);
   }
 };

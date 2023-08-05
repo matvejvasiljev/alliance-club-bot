@@ -31,6 +31,10 @@ const newsSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  fileId: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('News', newsSchema);
