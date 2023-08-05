@@ -1,7 +1,7 @@
 // const fs = require('fs');
 // const axios = require('axios');
 const bot = require('./bot');
-const s3 = require('./s3');
+// const s3 = require('./s3');
 const { getAdmin } = require('./controllers/admins');
 const { createNews } = require('./controllers/news');
 const { replays } = require('./utils/constants');
@@ -53,18 +53,18 @@ function botActions() {
 
     ctx.reply(`${firstName}, ${replays.getSuccess}`);
 
-    const imageLink = await s3.Upload(
-      {
-        path: fileUrl.href,
-      },
-      '/alliance/news/',
-    );
+    // const imageLink = await s3.Upload(
+    //   {
+    //     path: fileUrl.href,
+    //   },
+    //   '/alliance/news/',
+    // );
     // console.log('admin: ', admin);
     // console.log('imageLink: ', imageLink);
     const data = {
       message,
       title,
-      imageLink: imageLink.Location,
+      imageLink: fileUrl.href,
       admin: admin._id,
       tgMsgId,
       publishedAt,
