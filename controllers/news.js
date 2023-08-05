@@ -1,3 +1,4 @@
+// const { Blob } = require('buffer');
 const News = require('../models/news');
 const apiTg = require('../utils/apiTg');
 const bot = require('../bot');
@@ -8,7 +9,6 @@ module.exports.createNews = async (data) => {
     const news = await News.create({
       message: data.message,
       title: data.title,
-      imageLink: data.imageLink,
       owner: data.admin._id,
       tgMsgId: data.tgMsgId,
       publishedAt: data.publishedAt,
@@ -26,12 +26,12 @@ module.exports.createNews = async (data) => {
 module.exports.getAllNews = async (_, res, next) => {
   try {
     const news = await News.find({});
-    const newNews = news.map(async (item) => {
+    const newsWithPhotos = await Promise.all(news.map(async (item) => {
       const fileUrl = await bot.telegram.getFileLink(item.fileId);
-      const image = { photo: await apiTg.get(fileUrl.href).blob() };
-      Object.assign(item, image);
-    });
-    res.status(200).send(newNews);
+      const image = await apiTg.get(fileUrl.href);
+      return { data: { news: item, photo: image.data } };
+    }));
+    res.status(200).send(newsWithPhotos);
   } catch (err) {
     console.log(err.message);
     next(err);

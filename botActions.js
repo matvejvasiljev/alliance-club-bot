@@ -32,12 +32,10 @@ function botActions() {
 
     const title = caption.split('&&')[0].trim();
     const message = caption.split('&&')[1].trim();
-    const fileUrl = await ctx.telegram.getFileLink(fileId);
     ctx.reply(`${firstName}, ${replays.getSuccess}`);
     const data = {
       message,
       title,
-      imageLink: fileUrl.href,
       admin: admin._id,
       tgMsgId,
       publishedAt,
