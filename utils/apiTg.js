@@ -1,9 +1,5 @@
 const axios = require('axios');
 
-const apiTg = axios.create({
-  headers: {
-    'Content-Type': 'image/jpeg',
-  },
-});
+const apiTg = axios.create();
 
 module.exports = apiTg;

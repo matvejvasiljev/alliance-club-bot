@@ -27,6 +27,6 @@
         ]
       }
     ],
-    "no-console": 1
+    "no-console": "off"
   }
 }

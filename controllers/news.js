@@ -1,10 +1,8 @@
-// const { Blob } = require('buffer');
 const News = require('../models/news');
 const apiTg = require('../utils/apiTg');
 const bot = require('../bot');
 
 module.exports.createNews = async (data) => {
-  console.log('data: ', data);
   try {
     const news = await News.create({
       message: data.message,
@@ -18,7 +16,6 @@ module.exports.createNews = async (data) => {
     await news.save();
     return 'Ok';
   } catch (err) {
-    console.log(err.message);
     return err.message;
   }
 };
@@ -26,14 +23,29 @@ module.exports.createNews = async (data) => {
 module.exports.getAllNews = async (_, res, next) => {
   try {
     const news = await News.find({});
-    const newsWithPhotos = await Promise.all(news.map(async (item) => {
-      const fileUrl = await bot.telegram.getFileLink(item.fileId);
-      const image = await apiTg.get(fileUrl.href);
-      return { data: { news: item, photo: image.data } };
-    }));
-    res.status(200).send(newsWithPhotos);
+    res.status(200).send(news);
   } catch (err) {
-    console.log(err.message);
+    next(err);
+  }
+};
+
+module.exports.getNews = async (req, res, next) => {
+  try {
+    const news = await News.findById(req.params.idNews);
+    res.status(200).send(news);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.getPhoto = async (req, res, next) => {
+  try {
+    const news = await News.findById(req.params.idNews);
+    const fileUrl = await bot.telegram.getFileLink(news.fileId);
+    const image = await apiTg.get(fileUrl.href, { responseType: 'arraybuffer' });
+    res.contentType('image/jpeg');
+    res.status(200).send(image.data);
+  } catch (err) {
     next(err);
   }
 };
