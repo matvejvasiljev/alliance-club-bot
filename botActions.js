@@ -1,6 +1,6 @@
 const bot = require('./bot');
 const { getAdmin } = require('./controllers/admins');
-const { createNews } = require('./controllers/news');
+const { createNews, getAllNewsForBot } = require('./controllers/news');
 const { replays } = require('./utils/constants');
 
 function botActions() {
@@ -47,6 +47,15 @@ function botActions() {
     } else {
       ctx.reply(res);
     }
+  });
+
+  bot.command('Show all', async (ctx) => {
+    const news = await getAllNewsForBot();
+    let result = '';
+    for (let i = 0; i < news.length; i += 1) {
+      result += `[${i + 1}] ${news[i].title}\n`;
+    }
+    ctx.replyWithHTML(`<b>Список новостей:</b>\n\n ${result}`);
   });
 
   // TODO сделать добавление новости через добавление документа

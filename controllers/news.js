@@ -29,6 +29,15 @@ module.exports.getAllNews = async (_, res, next) => {
   }
 };
 
+module.exports.getAllNewsForBot = async () => {
+  try {
+    const news = await News.find({});
+    return news;
+  } catch (err) {
+    return err.message;
+  }
+};
+
 module.exports.getNews = async (req, res, next) => {
   try {
     const news = await News.findById(req.params.idNews);
