@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const helmet = require('helmet');
+// const helmet = require('helmet');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./middlewares/rateLimit');
 const bot = require('./bot');
@@ -12,7 +12,7 @@ const {
 const router = require('./routes/index');
 
 const app = express();
-app.use(helmet());
+// app.use(helmet());
 app.use(express.json());
 mongoose.connect(dbURL, {
   useNewUrlParser: true,
