@@ -49,7 +49,7 @@ function botActions() {
     }
   });
 
-  bot.command('Show all', async (ctx) => {
+  bot.command('show', async (ctx) => {
     const news = await getAllNewsForBot();
     let result = '';
     for (let i = 0; i < news.length; i += 1) {
