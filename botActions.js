@@ -53,7 +53,7 @@ function botActions() {
     const news = await getAllNewsForBot();
     let result = '';
     for (let i = 0; i < news.length; i += 1) {
-      result += `[${i + 1}] ${news[i].title}\n`;
+      result += `<b>${i + 1}.</b> ${news[i].title}\n`;
     }
     ctx.replyWithHTML(`<b>Список новостей:</b>\n\n ${result}`);
   });
