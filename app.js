@@ -22,7 +22,7 @@ mongoose.connect(dbURL, {
 }).then(() => console.log('mongodb is connected'))
   .catch((err) => console.log(err));
 app.use(cors({
-  origin: [addressCors],
+  origin: [addressCors, 'http://192.168.194.101:3000'],
 }));
 app.use(requestLogger);
 app.use(limiter);
