@@ -58,3 +58,12 @@ module.exports.getPhoto = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.deleteNews = async (tgMsgId) => {
+  try {
+    await News.deleteOne({ tgMsgId });
+    return 'Ok';
+  } catch (err) {
+    return err.message;
+  }
+};
